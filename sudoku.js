@@ -100,8 +100,8 @@ const solvedSudokuMatrix2 = [
   [7, 4, 5, 2, 8, 6, 3, 1, 9],
 ];
 
-function checkIfSudokuValueIsValid(value) {
-  return value !== 0;
+function checkIfCellIsEmpty(value) {
+  return value === 0;
 }
 
 function transformRowsIntoColumns(matrix) {
@@ -114,9 +114,9 @@ function checkIfRowHasDuplicates(row) {
   let hasDuplicates = false;
   for (rowValueIndex = 0; rowValueIndex < row.length; rowValueIndex++) {
     const rowValue = row[rowValueIndex];
-    const isRowValueValid = checkIfSudokuValueIsValid(rowValue);
+    const isCellEmpty = checkIfCellIsEmpty(rowValue);
 
-    if (!isRowValueValid) {
+    if (isCellEmpty) {
       continue;
     }
 
@@ -127,9 +127,9 @@ function checkIfRowHasDuplicates(row) {
     ) {
       const nextRowValue = row[nextRowValueIndex];
 
-      const isNextRowValueValid = checkIfSudokuValueIsValid(nextRowValue);
+      const isNextCellEmpty = checkIfCellIsEmpty(nextRowValue);
 
-      if (!isNextRowValueValid) {
+      if (isNextCellEmpty) {
         continue;
       }
 
@@ -243,5 +243,7 @@ function solveSudoku(sudokuMatrix) {
   return sudokuMatrix;
 }
 
-console.table(solveSudoku(sudokuMatrix2));
-console.table(solvedSudokuMatrix2);
+console.log("Sudoku matrix to be solved:");
+console.table(solveSudoku(sudokuMatrix));
+console.log("Solved sudoku matrix:");
+console.table(solvedSudokuMatrix);
