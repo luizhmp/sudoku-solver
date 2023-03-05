@@ -203,8 +203,9 @@ function checkIfHasDuplicatesInBlocks(matrix) {
     }
 
     const isLastBlock = startRowValueIndex === 6;
+    const shouldResetAndContinue = isLastRowInMatrix && !isLastBlock;
 
-    if (isLastRowInMatrix && !isLastBlock) {
+    if (shouldResetAndContinue) {
       rowIndex = -1;
       startRowValueIndex += 3;
       endOfBlockColumnIndex += 3;
@@ -216,25 +217,32 @@ function checkIfHasDuplicatesInBlocks(matrix) {
 
 function solveSudoku(sudokuMatrix) {
   for (let rowIndex = 0; rowIndex < sudokuMatrix.length; rowIndex++) {
+    const currentRow = sudokuMatrix[rowIndex];
     for (
       let columnIndex = 0;
-      columnIndex < sudokuMatrix[0].length;
+      columnIndex < sudokuMatrix.length;
       columnIndex++
     ) {
-      if (sudokuMatrix[rowIndex][columnIndex] === 0) {
+      const currentRowValue = currentRow[columnIndex];
+      const isCellEmpty = checkIfCellIsEmpty(currentRowValue);
+
+      if (isCellEmpty) {
         for (let value = 1; value <= 9; value++) {
           sudokuMatrix[rowIndex][columnIndex] = value;
-          if (
+
+          const isNumberValid =
             !checkIfHasDuplicatesInAllRows(sudokuMatrix) &&
             !checkIfHasDuplicatesInColumns(sudokuMatrix) &&
-            !checkIfHasDuplicatesInBlocks(sudokuMatrix)
-          ) {
+            !checkIfHasDuplicatesInBlocks(sudokuMatrix);
+
+          if (isNumberValid) {
             if (solveSudoku(sudokuMatrix)) {
               return sudokuMatrix;
             }
           }
           sudokuMatrix[rowIndex][columnIndex] = 0;
         }
+
         return false;
       }
     }
